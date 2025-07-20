@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ridham Arora | Data Science Portfolio</title>
+    <!-- Google Font -->
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Loading Screen -->
+    <div id="loader" class="loader flex flex-col items-center justify-center">
+      <p class="loader__text">Loading 25%...</p>
+    </div>
+
+    <!-- Main Content -->
+    <main id="main" class="hidden">
+      <!-- Hero Section -->
+      <section class="hero section container">
+        <article class="hero__content flex flex-col items-center gap-16">
+          <h1>Hi, I'm Ridham</h1>
+          <h2>Aspiring Data Scientist &amp; Software Developer</h2>
+          <p class="tagline">
+            Turning raw data into real-world insights through clean code and
+            creative analysis.
+          </p>
+        </article>
+      </section>
+
+      <!-- Projects Section -->
+      <section class="projects section container">
+        <h2>Business Value Powered by Data</h2>
+        <p class="subtitle">
+          From forests to finance, my projects make data meaningful.
+        </p>
+
+        <div class="project-grid">
+          <!-- Project Card 1 -->
+          <div class="card project-card">
+            <div class="card__body flex flex-col gap-8">
+              <h3 class="project-title">🌿 Biodiversity Analysis of U.S. National Parks</h3>
+              <p class="project-desc">
+                Analyzes endangered species data across U.S. national parks using Python. Focuses on species conservation, threat levels, and park-wise biodiversity insights.
+              </p>
+              <a
+                href="https://github.com/ridham1102/Biodiversity_anylsis"
+                class="btn btn--neon"
+                target="_blank"
+                rel="noopener noreferrer"
+                >GitHub</a
+              >
+            </div>
+          </div>
+
+          <!-- Project Card 2 -->
+          <div class="card project-card">
+            <div class="card__body flex flex-col gap-8">
+              <h3 class="project-title">🔥 Algerian Forest Fires Analysis</h3>
+              <p class="project-desc">
+                Performs analysis on meteorological data to predict forest fires in Algerian regions. Uses machine learning models like logistic regression and random forest.
+              </p>
+              <a
+                href="https://github.com/ridham1102/Algerian-Forest-Fires-Analysis"
+                class="btn btn--neon"
+                target="_blank"
+                rel="noopener noreferrer"
+                >GitHub</a
+              >
+            </div>
+          </div>
+
+          <!-- Project Card 3 -->
+          <div class="card project-card">
+            <div class="card__body flex flex-col gap-8">
+              <h3 class="project-title">📉 Trader Sentiment Analysis</h3>
+              <p class="project-desc">
+                Analyzes trader sentiment data to understand market behavior using data visualization and basic NLP techniques.
+              </p>
+              <a
+                href="https://github.com/ridham1102/trader_sentiment_analysis"
+                class="btn btn--neon"
+                target="_blank"
+                rel="noopener noreferrer"
+                >GitHub</a
+              >
+            </div>
+          </div>
+
+          <!-- Project Card 4 -->
+          <div class="card project-card">
+            <div class="card__body flex flex-col gap-8">
+              <h3 class="project-title">📊 Analytics Position Case Study</h3>
+              <p class="project-desc">
+                Business analytics case study for a fictional company. Analyzes customer, product, and revenue trends using Python and Excel.
+              </p>
+              <a
+                href="https://github.com/ridham1102/Analytics_Position_Case_Study"
+                class="btn btn--neon"
+                target="_blank"
+                rel="noopener noreferrer"
+                >GitHub</a
+              >
+            </div>
+          </div>
+
+          <!-- Project Card 5 -->
+          <div class="card project-card">
+            <div class="card__body flex flex-col gap-8">
+              <h3 class="project-title">🚗 Car Price Prediction (CarDekho Dataset)</h3>
+              <p class="project-desc">
+                Machine learning project to predict used car prices using the CarDekho dataset. Involves data preprocessing, feature engineering, and regression models.
+              </p>
+              <a
+                href="https://github.com/ridham1102/Car-Price-Prediction"
+                class="btn btn--neon"
+                target="_blank"
+                rel="noopener noreferrer"
+                >GitHub</a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Interactive Prediction & Impact Section -->
+      <section class="prediction section container">
+        <h2>Interactive Prediction & Impact</h2>
+        <p class="subtitle">
+          Explore the accuracy and performance of each machine learning model.
+        </p>
+
+        <!-- Project Selector Buttons -->
+        <div class="project-selector flex flex-wrap gap-8 justify-center mb-32">
+          <button class="project-btn active" data-project="biodiversity">
+            🌿 Biodiversity
+          </button>
+          <button class="project-btn" data-project="forest-fires">
+            🔥 Forest Fires
+          </button>
+          <button class="project-btn" data-project="trader-sentiment">
+            📉 Trader Sentiment
+          </button>
+          <button class="project-btn" data-project="analytics-case">
+            📊 Analytics Case
+          </button>
+          <button class="project-btn" data-project="car-price">
+            🚗 Car Price
+          </button>
+        </div>
+
+        <!-- Chart Container -->
+        <div class="chart-container">
+          <div class="chart-header flex justify-between items-center mb-16">
+            <h3 id="chart-title">Species Conservation Accuracy (%)</h3>
+            <div class="toggle-controls flex gap-8">
+              <button class="toggle-btn active" data-line="predicted">
+                <span class="toggle-indicator predicted-indicator"></span>
+                Predicted
+              </button>
+              <button class="toggle-btn active" data-line="actual">
+                <span class="toggle-indicator actual-indicator"></span>
+                Actual
+              </button>
+            </div>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="predictionChart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact Section -->
+      <section class="contact section container">
+        <h2>Get In Touch</h2>
+        <p class="contact-subtitle">Let's collaborate on data-driven solutions</p>
+
+        <div class="contact-content">
+          <!-- Contact Form -->
+          <div class="contact-form-container">
+            <form id="contactForm" class="contact-form">
+              <div class="form-group">
+                <label for="userEmail" class="form-label">Your Email</label>
+                <input 
+                  type="email" 
+                  id="userEmail" 
+                  name="email" 
+                  class="form-control contact-input" 
+                  required 
+                  aria-describedby="emailError"
+                />
+                <div id="emailError" class="error-message" aria-live="polite"></div>
+              </div>
+              
+              <div class="form-group">
+                <label for="userMessage" class="form-label">Message</label>
+                <textarea 
+                  id="userMessage" 
+                  name="message" 
+                  class="form-control contact-textarea" 
+                  rows="5" 
+                  required 
+                  placeholder="Tell me about your project or just say hi..."
+                  aria-describedby="messageError"
+                ></textarea>
+                <div id="messageError" class="error-message" aria-live="polite"></div>
+              </div>
+              
+              <button type="submit" class="btn btn--contact-submit">
+                Send Message
+              </button>
+              
+              <div id="formSuccess" class="success-message hidden" aria-live="polite">
+                Message sent! I'll get back to you soon.
+              </div>
+            </form>
+          </div>
+
+          <!-- Contact Info -->
+          <div class="contact-info">
+            <h3 class="contact-info-title">Connect with me</h3>
+            <div class="contact-links flex flex-col gap-16">
+              <!-- Email -->
+              <a
+                href="mailto:aridham1102@gmail.com"
+                class="contact-link flex items-center gap-8"
+                aria-label="Email Ridham"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M2 4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H2zm0 2h20v.01L12 13 2 6.01V6zm0 2.236l8.29 5.518c.429.286.983.286 1.412 0L22 8.236V18H2V8.236z"
+                  />
+                </svg>
+                <span>aridham1102@gmail.com</span>
+              </a>
+
+              <!-- LinkedIn -->
+              <a
+                href="https://www.linkedin.com/in/ridhamarora1/"
+                class="contact-link flex items-center gap-8"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Ridham's LinkedIn"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M4.98 3.5A2.5 2.5 0 1 0 5 8.5 2.5 2.5 0 0 0 4.98 3.5zM2 9h6v12H2zm7.5 0h5.5v1.71c.77-1.17 2.2-1.71 3.71-1.71 3.31 0 4.5 1.94 4.5 5.14V21h-6v-5.19c0-1.24-.02-2.85-1.74-2.85-1.74 0-2.01 1.36-2.01 2.76V21h-6z"
+                  />
+                </svg>
+                <span>LinkedIn</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Scripts -->
+    <script src="app.js" defer></script>
+  </body>
+</html>
