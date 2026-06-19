@@ -88,6 +88,35 @@
     <main id="main">
       <!-- ===================== HERO ===================== -->
       <section class="hero section" id="home">
+        <!-- Market ticker strip -->
+        <div class="ticker" aria-hidden="true">
+          <div class="ticker__track">
+            <span class="tk up">NIFTY ▲ 0.42%</span>
+            <span class="tk down">BANKNIFTY ▼ 0.18%</span>
+            <span class="tk up">FINNIFTY ▲ 0.31%</span>
+            <span class="tk up">SENSEX ▲ 0.27%</span>
+            <span class="tk hl">POLARS ⚡ 1.8s</span>
+            <span class="tk">DUCKDB · parquet</span>
+            <span class="tk hl">ROWS 1.2B</span>
+            <span class="tk up">R² 0.86</span>
+            <span class="tk">BACKTEST ✓</span>
+            <!-- duplicate for seamless loop -->
+            <span class="tk up">NIFTY ▲ 0.42%</span>
+            <span class="tk down">BANKNIFTY ▼ 0.18%</span>
+            <span class="tk up">FINNIFTY ▲ 0.31%</span>
+            <span class="tk up">SENSEX ▲ 0.27%</span>
+            <span class="tk hl">POLARS ⚡ 1.8s</span>
+            <span class="tk">DUCKDB · parquet</span>
+            <span class="tk hl">ROWS 1.2B</span>
+            <span class="tk up">R² 0.86</span>
+            <span class="tk">BACKTEST ✓</span>
+          </div>
+        </div>
+
+        <svg class="hero__chart" viewBox="0 0 600 200" preserveAspectRatio="none" aria-hidden="true">
+          <polyline class="hero__line" points="0,170 50,150 100,158 150,120 200,132 250,90 300,104 350,66 400,80 450,40 500,54 550,20 600,34" />
+        </svg>
+
         <div class="container hero__inner">
           <p class="hero__eyebrow reveal">
             <span class="dot"></span> Data Scientist · Quant &amp; Analytics · Delhi, India
@@ -206,19 +235,86 @@
       <!-- ===================== DASHBOARD / FEATURED ===================== -->
       <section class="section" id="dashboard">
         <div class="container">
-          <p class="section__kicker reveal">03 — Featured</p>
+          <p class="section__kicker reveal">03 — Featured project</p>
           <h2 class="section__title reveal">Options Backtesting Dashboard</h2>
           <p class="section__lead reveal">
-            An interactive demo of the kind of strategy-research dashboard I build at work — explore
-            backtested PnL across weekdays and days-to-expiry, and watch the strategy equity curve grow.
+            How I turned <strong>billion-row, full-day Excel loads</strong> into a strategy-research
+            dashboard that refreshes in <strong>seconds</strong>.
           </p>
 
+          <!-- Headline result -->
+          <div class="result-banner reveal">
+            <div class="result-banner__big"><span>hours&nbsp;→&nbsp;days</span> <em>became</em> <span class="accent">seconds&nbsp;→&nbsp;minutes</span></div>
+            <p class="result-banner__sub">~1,000× faster strategy iteration on the same data</p>
+          </div>
+
+          <!-- Before / After -->
+          <div class="ba reveal">
+            <div class="ba__card before">
+              <span class="ba__tag">● Before</span>
+              <h4>Excel, reloaded from scratch</h4>
+              <ul>
+                <li>Re-loaded the <strong>entire</strong> dataset every single time</li>
+                <li>Data runs <strong>100s of millions → 1&nbsp;billion+ rows</strong></li>
+                <li>Excel caps at ~1M rows — couldn't even open the raw data</li>
+                <li>Full loads took <strong>hours, sometimes a whole day</strong></li>
+              </ul>
+            </div>
+            <div class="ba__arrow" aria-hidden="true">→</div>
+            <div class="ba__card after">
+              <span class="ba__tag">● After</span>
+              <h4>Python pipeline + incremental aggregation</h4>
+              <ul>
+                <li>Pre-aggregates raw data into <strong>partitioned Parquet</strong></li>
+                <li>Each run processes <strong>only new dates</strong>, then appends</li>
+                <li>Billions of rows viewable as <strong>aggregated heatmaps</strong></li>
+                <li>Refreshes in <strong>seconds to minutes</strong></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Pipeline -->
+          <h3 class="case__h3 reveal">How it works</h3>
+          <div class="pipe reveal">
+            <div class="pipe__step">
+              <span class="pipe__n">01</span>
+              <h4>Ingest</h4>
+              <p>Read RAR archives of raw backtest output and normalize to <strong>Parquet</strong> with <strong>Polars</strong> — chunked, memory-managed.</p>
+            </div>
+            <div class="pipe__step">
+              <span class="pipe__n">02</span>
+              <h4>Aggregate · incrementally</h4>
+              <p>Track processed dates so each run aggregates <strong>only new data</strong>, appending to partitioned files. No full reloads.</p>
+            </div>
+            <div class="pipe__step">
+              <span class="pipe__n">03</span>
+              <h4>Query</h4>
+              <p><strong>DuckDB</strong> runs SQL straight over the Parquet files — group-bys across params, DTE, weekday — in milliseconds.</p>
+            </div>
+            <div class="pipe__step">
+              <span class="pipe__n">04</span>
+              <h4>Explore</h4>
+              <p>A <strong>Streamlit</strong> app with an Excel-style drag-and-drop pivot builder, saved layouts, and formatted <strong>Excel heatmaps</strong> via xlwings.</p>
+            </div>
+          </div>
+
+          <div class="stack reveal" aria-label="Tech stack">
+            <span>Python</span><span>Polars</span><span>DuckDB</span><span>PyArrow</span>
+            <span>Parquet</span><span>Streamlit</span><span>xlwings</span><span>Plotly</span><span>pandas</span>
+          </div>
+
+          <!-- KPIs -->
           <div class="kpis reveal" aria-label="Dashboard metrics">
+            <div class="kpi"><span class="kpi__num" data-count="1" data-suffix="B+">0</span><span class="kpi__label">rows you can view</span></div>
             <div class="kpi"><span class="kpi__num" data-count="6" data-suffix="+">0</span><span class="kpi__label">years of data</span></div>
-            <div class="kpi"><span class="kpi__num" data-count="180" data-suffix="k+">0</span><span class="kpi__label">backtests run</span></div>
-            <div class="kpi"><span class="kpi__num" data-count="2" data-prefix="&lt;" data-suffix="s">0</span><span class="kpi__label">dashboard load</span></div>
+            <div class="kpi"><span class="kpi__num" data-count="2" data-suffix="s">0</span><span class="kpi__label">typical load (was hours)</span></div>
             <div class="kpi"><span class="kpi__num" data-count="4">0</span><span class="kpi__label">markets covered</span></div>
           </div>
+
+          <h3 class="case__h3 reveal">Try it — interactive demo</h3>
+          <p class="section__lead reveal">
+            Explore backtested PnL across weekdays and days-to-expiry, and watch the equity curve build.
+          </p>
 
           <div class="dash">
             <div class="dash__controls reveal">
@@ -267,81 +363,91 @@
           <div class="proj-grid">
             <article class="proj reveal">
               <header class="proj__head">
-                <h3 class="proj__title">🚗 Car Price Prediction</h3>
-                <span class="proj__metric">R² = 0.86</span>
+                <span class="proj__badge">REGRESSION</span>
+                <span class="proj__metric">R² 0.86</span>
               </header>
+              <h3 class="proj__title">Car Price Prediction</h3>
               <p class="proj__desc">
-                Predicted used-car prices on the CarDekho dataset. Built and compared
-                Random Forest, Ridge, Lasso, KNN and Decision Tree regressors with full feature
-                engineering and model evaluation.
+                Benchmarked five regressors on the CarDekho dataset; the best (Random Forest) reached
+                <strong>R² 0.86</strong> after feature engineering, encoding and tuning.
               </p>
-              <div class="proj__tags"><span>Regression</span><span>scikit-learn</span><span>Feature Eng.</span></div>
+              <div class="proj__tags"><span>scikit-learn</span><span>RandomForest</span><span>Feature Eng.</span></div>
+              <svg class="proj__spark" viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,34 25,30 50,31 75,22 100,24 125,14 150,17 175,7 200,9" /></svg>
               <a class="proj__link" href="https://github.com/ridham1102/Car-Price-Prediction" target="_blank" rel="noopener noreferrer">View code →</a>
             </article>
 
             <article class="proj reveal">
               <header class="proj__head">
-                <h3 class="proj__title">🌿 Biodiversity Analysis</h3>
+                <span class="proj__badge">EXPLORATORY</span>
                 <span class="proj__metric">EDA</span>
               </header>
+              <h3 class="proj__title">Biodiversity Analysis</h3>
               <p class="proj__desc">
-                Exploratory analysis of endangered species across U.S. national parks. Surfaced
-                conservation patterns and threat levels by park category, delivered through clear
-                visual storytelling.
+                EDA on endangered species across U.S. national parks — quantified threat levels and
+                surfaced conservation patterns by park category through clear visual storytelling.
               </p>
               <div class="proj__tags"><span>pandas</span><span>Seaborn</span><span>Matplotlib</span></div>
+              <svg class="proj__spark" viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,20 25,24 50,14 75,18 100,10 125,16 150,8 175,18 200,12" /></svg>
               <a class="proj__link" href="https://github.com/ridham1102/Biodiversity_anylsis" target="_blank" rel="noopener noreferrer">View code →</a>
             </article>
 
             <article class="proj reveal">
               <header class="proj__head">
-                <h3 class="proj__title">💬 Kindle Review Sentiment</h3>
-                <span class="proj__metric">NLP</span>
+                <span class="proj__badge">NLP</span>
+                <span class="proj__metric">Naive Bayes</span>
               </header>
+              <h3 class="proj__title">Kindle Review Sentiment</h3>
               <p class="proj__desc">
-                NLP classifier for customer sentiment using Bag-of-Words, TF-IDF and Naive Bayes.
-                Preprocessed text with NLTK — tokenization, stopword removal and cleaning.
+                Classified review sentiment with Bag-of-Words + TF-IDF + Naive Bayes, after NLTK
+                tokenization, stop-word removal and text cleaning.
               </p>
               <div class="proj__tags"><span>NLTK</span><span>TF-IDF</span><span>Naive Bayes</span></div>
+              <svg class="proj__spark" viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,28 25,20 50,26 75,16 100,20 125,10 150,18 175,9 200,14" /></svg>
               <a class="proj__link" href="https://github.com/ridham1102/Kindle-Review-" target="_blank" rel="noopener noreferrer">View code →</a>
             </article>
 
             <article class="proj reveal">
               <header class="proj__head">
-                <h3 class="proj__title">🔥 Algerian Forest Fires</h3>
-                <span class="proj__metric">Classification</span>
+                <span class="proj__badge">CLASSIFICATION</span>
+                <span class="proj__metric">RF · LogReg</span>
               </header>
+              <h3 class="proj__title">Algerian Forest Fires</h3>
               <p class="proj__desc">
-                Predicted forest-fire risk from Algerian meteorological data using logistic
-                regression and random forest, with EDA on the driving weather features.
+                Predicted forest-fire risk from Algerian weather data with logistic regression and
+                random forest, plus EDA on the driving meteorological features.
               </p>
               <div class="proj__tags"><span>Logistic Reg.</span><span>Random Forest</span></div>
+              <svg class="proj__spark" viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,30 25,26 50,28 75,18 100,22 125,15 150,20 175,11 200,8" /></svg>
               <a class="proj__link" href="https://github.com/ridham1102/Algerian-Forest-Fires-Analysis" target="_blank" rel="noopener noreferrer">View code →</a>
             </article>
 
             <article class="proj reveal">
               <header class="proj__head">
-                <h3 class="proj__title">📉 Trader Sentiment Analysis</h3>
-                <span class="proj__metric">Analytics</span>
+                <span class="proj__badge">ANALYTICS</span>
+                <span class="proj__metric">EDA · NLP</span>
               </header>
+              <h3 class="proj__title">Trader Sentiment Analysis</h3>
               <p class="proj__desc">
-                Analyzed trader sentiment data to understand market behaviour, combining data
-                visualization with basic NLP techniques.
+                Connected trader sentiment to market behaviour using EDA and light NLP to read
+                directional bias from the data.
               </p>
               <div class="proj__tags"><span>EDA</span><span>Visualization</span></div>
+              <svg class="proj__spark" viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,18 25,14 50,22 75,16 100,26 125,18 150,28 175,20 200,24" /></svg>
               <a class="proj__link" href="https://github.com/ridham1102/trader_sentiment_analysis" target="_blank" rel="noopener noreferrer">View code →</a>
             </article>
 
             <article class="proj reveal">
               <header class="proj__head">
-                <h3 class="proj__title">📊 Analytics Case Study</h3>
-                <span class="proj__metric">Business</span>
+                <span class="proj__badge">BUSINESS BI</span>
+                <span class="proj__metric">Python · Excel</span>
               </header>
+              <h3 class="proj__title">Analytics Case Study</h3>
               <p class="proj__desc">
-                Business-analytics case study analyzing customer, product and revenue trends with
-                Python and Excel to drive actionable recommendations.
+                Analyzed customer, product and revenue trends in Python &amp; Excel and turned them
+                into clear, actionable business recommendations.
               </p>
               <div class="proj__tags"><span>Python</span><span>Excel</span><span>BI</span></div>
+              <svg class="proj__spark" viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,32 25,28 50,30 75,24 100,26 125,18 150,20 175,12 200,10" /></svg>
               <a class="proj__link" href="https://github.com/ridham1102/Analytics_Position_Case_Study" target="_blank" rel="noopener noreferrer">View code →</a>
             </article>
           </div>

@@ -199,6 +199,10 @@
         cell.style.color = fg;
         cell.textContent = v > 0 ? "+" + v : String(v);
         cell.title = WEEKDAYS[r] + " · " + DTE_COLS[c] + " → " + (v > 0 ? "+" : "") + v + " pts (avg)";
+        if (!prefersReduced) {
+          cell.classList.add("pulse");
+          cell.style.animationDelay = (r * 5 + c) * 22 + "ms";
+        }
         rowEl.appendChild(cell);
       });
       host.appendChild(rowEl);
