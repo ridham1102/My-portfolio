@@ -319,21 +319,25 @@
     emailInput.addEventListener("input", () => hideErr(emailErr));
     msgInput.addEventListener("input", () => hideErr(msgErr));
 
-    const showSuccess = () => {
+    const SENT_MSG = success ? success.textContent : "";
+    const MAIL_MSG = "📨 Opening your email app — just hit send and it reaches me directly.";
+    const showSuccess = (msg) => {
       if (!success) return;
+      success.textContent = msg || SENT_MSG;
       success.classList.remove("hidden");
       form.reset();
-      setTimeout(() => success.classList.add("hidden"), 6000);
+      setTimeout(() => success.classList.add("hidden"), 7000);
     };
 
-    const mailtoFallback = () => {
+    const openEmail = () => {
       const subject = encodeURIComponent("Portfolio contact from " + emailInput.value.trim());
       const body = encodeURIComponent("From: " + emailInput.value.trim() + "\n\n" + msgInput.value.trim());
       window.open("mailto:aridham1102@gmail.com?subject=" + subject + "&body=" + body, "_blank");
+      showSuccess(MAIL_MSG);
     };
 
     // Netlify hosts the form backend; anywhere else (e.g. GitHub Pages) we open email
-    // so a message is never silently dropped.
+    // so a message is never silently dropped — and the UI says which path was taken.
     const isNetlify = /netlify\.app$/.test(location.hostname) || form.dataset.handler === "netlify";
 
     form.addEventListener("submit", function (e) {
@@ -343,8 +347,7 @@
       if (!okEmail || !okMsg) return;
 
       if (!isNetlify) {
-        mailtoFallback();
-        showSuccess();
+        openEmail();
         return;
       }
 
@@ -354,8 +357,8 @@
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: payload,
       })
-        .then((r) => (r.ok ? showSuccess() : mailtoFallback()))
-        .catch(() => mailtoFallback());
+        .then((r) => (r.ok ? showSuccess() : openEmail()))
+        .catch(openEmail);
     });
   }
 })();
