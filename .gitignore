@@ -1,0 +1,16 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
+
+# Scratch / non-portfolio files
+1.py
+*.ipynb
+.ipynb_checkpoints/
+__pycache__/
+
+# Source résumé / docs (the published copy lives in assets/)
+/Ridham Arora.pdf
+*.docx

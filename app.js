@@ -1,616 +1,361 @@
-// Project data with graph information
-const projectsData = {
-  'biodiversity': {
-    title: 'Species Conservation Accuracy (%)',
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-    predicted: [85, 87, 89, 91, 88, 92],
-    actual: [82, 85, 87, 89, 86, 90]
-  },
-  'forest-fires': {
-    title: 'Fire Risk Prediction Accuracy (%)',
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-    predicted: [78, 82, 85, 87, 84, 89],
-    actual: [76, 80, 83, 85, 82, 87]
-  },
-  'trader-sentiment': {
-    title: 'Market Sentiment Prediction (%)',
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-    predicted: [72, 75, 78, 81, 77, 84],
-    actual: [70, 73, 76, 79, 75, 82]
-  },
-  'analytics-case': {
-    title: 'Revenue Prediction Accuracy (%)',
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-    predicted: [88, 90, 92, 89, 94, 91],
-    actual: [86, 88, 90, 87, 92, 89]
-  },
-  'car-price': {
-    title: 'Price Prediction Accuracy (%)',
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-    predicted: [82, 84, 87, 89, 85, 91],
-    actual: [80, 82, 85, 87, 83, 89]
-  }
-};
+/* =========================================================
+   Ridham Arora — Portfolio interactions
+   ========================================================= */
+(function () {
+  "use strict";
 
-// Chart instance and state
-let chart = null;
-let currentProject = 'biodiversity';
-let lineVisibility = {
-  predicted: true,
-  actual: true
-};
+  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-// Loading Screen Animation
-document.addEventListener('DOMContentLoaded', function() {
-  const loader = document.getElementById('loader');
-  const main = document.getElementById('main');
-  const loaderText = document.querySelector('.loader__text');
-  
-  // Loading sequence with timing
-  const loadingSequence = [
-    { text: 'Initializing Neural Networks...', delay: 0 },
-    { text: 'Loading ML Models... 25%', delay: 1000 },
-    { text: 'Training Algorithms... 50%', delay: 2000 },
-    { text: 'Aspiring Data Scientist... 75%', delay: 3000 },
-    { text: 'Machine Learning Expert... 100%', delay: 4000 }
-  ];
-  
-  // Execute loading sequence
-  loadingSequence.forEach((step, index) => {
-    setTimeout(() => {
-      loaderText.textContent = step.text;
-      
-      // If this is the final step, start fade out after a brief delay
-      if (index === loadingSequence.length - 1) {
-        setTimeout(() => {
-          fadeOutLoader();
-        }, 800);
-      }
-    }, step.delay);
-  });
-  
-  // Fade out loader and show main content
-  function fadeOutLoader() {
-    loader.classList.add('fade-out');
-    
-    // Wait for fade animation to complete, then show main content
-    setTimeout(() => {
-      loader.style.display = 'none';
-      main.classList.remove('hidden');
-      
-      // Initialize chart and interactions
-      initializeChart();
-      setupInteractions();
-      setupContactForm();
-      animateSections();
-    }, 800);
-  }
-  
-  // Animate sections with staggered timing
-  function animateSections() {
-    const sections = document.querySelectorAll('.section');
-    
-    sections.forEach((section, index) => {
-      setTimeout(() => {
-        section.style.animationDelay = `${index * 0.3}s`;
-        section.style.animationPlayState = 'running';
-      }, index * 200);
+  /* ---------------- Footer year ---------------- */
+  const yearEl = document.getElementById("year");
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  /* ---------------- Nav: scroll state, mobile toggle, active link ---------------- */
+  const nav = document.getElementById("nav");
+  const navLinks = document.getElementById("navLinks");
+  const navToggle = document.getElementById("navToggle");
+
+  const onScroll = () => {
+    if (nav) nav.classList.toggle("is-scrolled", window.scrollY > 12);
+  };
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  if (navToggle && navLinks) {
+    navToggle.addEventListener("click", () => {
+      const open = navLinks.classList.toggle("is-open");
+      navToggle.setAttribute("aria-expanded", String(open));
     });
+    navLinks.querySelectorAll("a").forEach((a) =>
+      a.addEventListener("click", () => {
+        navLinks.classList.remove("is-open");
+        navToggle.setAttribute("aria-expanded", "false");
+      })
+    );
   }
-});
 
-// Initialize Chart.js
-function initializeChart() {
-  const ctx = document.getElementById('predictionChart');
-  if (!ctx) return;
-  
-  const data = projectsData[currentProject];
-  
-  chart = new Chart(ctx.getContext('2d'), {
-    type: 'line',
-    data: {
-      labels: data.labels,
-      datasets: [
-        {
-          label: 'Predicted',
-          data: data.predicted,
-          borderColor: '#00f7ff',
-          backgroundColor: 'rgba(0, 247, 255, 0.1)',
-          borderWidth: 3,
-          fill: true,
-          tension: 0.4,
-          pointBackgroundColor: '#00f7ff',
-          pointBorderColor: '#00f7ff',
-          pointBorderWidth: 2,
-          pointRadius: 6,
-          pointHoverRadius: 8,
-          hidden: !lineVisibility.predicted
-        },
-        {
-          label: 'Actual',
-          data: data.actual,
-          borderColor: '#ff00c3',
-          backgroundColor: 'rgba(255, 0, 195, 0.1)',
-          borderWidth: 3,
-          fill: true,
-          tension: 0.4,
-          pointBackgroundColor: '#ff00c3',
-          pointBorderColor: '#ff00c3',
-          pointBorderWidth: 2,
-          pointRadius: 6,
-          pointHoverRadius: 8,
-          hidden: !lineVisibility.actual
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          display: false
-        },
-        tooltip: {
-          backgroundColor: 'rgba(14, 14, 14, 0.9)',
-          titleColor: '#fff',
-          bodyColor: '#fff',
-          borderColor: '#00f7ff',
-          borderWidth: 1,
-          cornerRadius: 8,
-          displayColors: true,
-          callbacks: {
-            labelColor: function(context) {
-              return {
-                borderColor: context.dataset.borderColor,
-                backgroundColor: context.dataset.borderColor
-              };
-            }
+  // Active link highlighting
+  const sections = Array.from(document.querySelectorAll("main section[id]"));
+  const linkFor = (id) => document.querySelector('.nav__links a[href="#' + id + '"]');
+  if ("IntersectionObserver" in window) {
+    const navObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          const link = linkFor(e.target.id);
+          if (!link) return;
+          if (e.isIntersecting) {
+            document.querySelectorAll(".nav__links a").forEach((l) => l.classList.remove("is-active"));
+            link.classList.add("is-active");
           }
-        }
+        });
       },
-      scales: {
-        x: {
-          grid: {
-            color: 'rgba(255, 255, 255, 0.1)',
-            drawBorder: false
-          },
-          ticks: {
-            color: 'rgba(255, 255, 255, 0.8)',
-            font: {
-              size: 12
-            }
-          }
-        },
-        y: {
-          grid: {
-            color: 'rgba(255, 255, 255, 0.1)',
-            drawBorder: false
-          },
-          ticks: {
-            color: 'rgba(255, 255, 255, 0.8)',
-            font: {
-              size: 12
-            },
-            callback: function(value) {
-              return value + '%';
-            }
-          },
-          min: 60,
-          max: 100
-        }
-      },
-      interaction: {
-        intersect: false,
-        mode: 'index'
-      },
-      animation: {
-        duration: 1000,
-        easing: 'easeInOutQuart'
-      }
-    }
-  });
-}
+      { rootMargin: "-45% 0px -50% 0px" }
+    );
+    sections.forEach((s) => navObserver.observe(s));
+  }
 
-// Setup all interactive functionality
-function setupInteractions() {
-  // Project selector buttons
-  const projectButtons = document.querySelectorAll('.project-btn');
-  projectButtons.forEach(btn => {
-    btn.addEventListener('click', function() {
-      const project = this.dataset.project;
-      if (project !== currentProject) {
-        switchProject(project, this);
-      }
-    });
-  });
-  
-  // Toggle buttons for predicted/actual lines
-  const toggleButtons = document.querySelectorAll('.toggle-btn');
-  toggleButtons.forEach(btn => {
-    btn.addEventListener('click', function() {
-      const lineType = this.dataset.line;
-      toggleLine(lineType, this);
-    });
-  });
-  
-  // Enhanced project card interactions
-  const projectCards = document.querySelectorAll('.project-card');
-  projectCards.forEach(card => {
-    // Add mouse enter/leave effects
-    card.addEventListener('mouseenter', function() {
-      this.style.transform = 'translateY(-8px) scale(1.02)';
-    });
-    
-    card.addEventListener('mouseleave', function() {
-      this.style.transform = 'translateY(0) scale(1)';
-    });
-    
-    // Add click ripple effect
-    card.addEventListener('click', function(e) {
-      const rect = this.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      
-      const ripple = document.createElement('div');
-      ripple.style.position = 'absolute';
-      ripple.style.width = '4px';
-      ripple.style.height = '4px';
-      ripple.style.background = '#00f7ff';
-      ripple.style.borderRadius = '50%';
-      ripple.style.left = x + 'px';
-      ripple.style.top = y + 'px';
-      ripple.style.pointerEvents = 'none';
-      ripple.style.animation = 'ripple 0.6s ease-out forwards';
-      
-      this.appendChild(ripple);
-      
-      setTimeout(() => {
-        ripple.remove();
-      }, 600);
-    });
-  });
-  
-  // Contact link hover effects
-  const contactLinks = document.querySelectorAll('.contact-link');
-  contactLinks.forEach(link => {
-    link.addEventListener('mouseenter', function() {
-      const svg = this.querySelector('svg');
-      if (svg) {
-        svg.style.transform = 'scale(1.1) rotate(5deg)';
-      }
-    });
-    
-    link.addEventListener('mouseleave', function() {
-      const svg = this.querySelector('svg');
-      if (svg) {
-        svg.style.transform = 'scale(1) rotate(0deg)';
-      }
-    });
-  });
-}
-
-// Setup Contact Form
-function setupContactForm() {
-  const form = document.getElementById('contactForm');
-  const emailInput = document.getElementById('userEmail');
-  const messageInput = document.getElementById('userMessage');
-  const emailError = document.getElementById('emailError');
-  const messageError = document.getElementById('messageError');
-  const successMessage = document.getElementById('formSuccess');
-  
-  if (!form || !emailInput || !messageInput) {
-    console.warn('Contact form elements not found');
-    return;
-  }
-  
-  // Real-time validation
-  emailInput.addEventListener('blur', validateEmail);
-  messageInput.addEventListener('blur', validateMessage);
-  
-  // Clear errors on input
-  emailInput.addEventListener('input', () => hideError(emailError));
-  messageInput.addEventListener('input', () => hideError(messageError));
-  
-  // Form submission
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const isValidEmail = validateEmail();
-    const isValidMessage = validateMessage();
-    
-    if (isValidEmail && isValidMessage) {
-      submitForm();
-    }
-  });
-  
-  function validateEmail() {
-    const email = emailInput.value.trim();
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    
-    if (!email) {
-      showError(emailError, 'Email is required');
-      return false;
-    } else if (!emailRegex.test(email)) {
-      showError(emailError, 'Please enter a valid email address');
-      return false;
-    } else {
-      hideError(emailError);
-      return true;
-    }
-  }
-  
-  function validateMessage() {
-    const message = messageInput.value.trim();
-    
-    if (!message) {
-      showError(messageError, 'Message is required');
-      return false;
-    } else if (message.length < 10) {
-      showError(messageError, 'Message must be at least 10 characters long');
-      return false;
-    } else {
-      hideError(messageError);
-      return true;
-    }
-  }
-  
-  function showError(errorElement, message) {
-    if (errorElement) {
-      errorElement.textContent = message;
-      errorElement.classList.add('show');
-    }
-  }
-  
-  function hideError(errorElement) {
-    if (errorElement) {
-      errorElement.classList.remove('show');
-      errorElement.textContent = '';
-    }
-  }
-  
-  function submitForm() {
-    const email = emailInput.value.trim();
-    const message = messageInput.value.trim();
-    
-    // Create mailto link
-    const subject = encodeURIComponent('Portfolio Contact Form - Message from ' + email);
-    const body = encodeURIComponent(`From: ${email}\n\nMessage:\n${message}`);
-    const mailtoLink = `mailto:aridham1102@gmail.com?subject=${subject}&body=${body}`;
-    
-    // Open mailto link
-    window.open(mailtoLink, '_self');
-    
-    // Show success message
-    showSuccessMessage();
-    
-    // Reset form
-    form.reset();
-    hideError(emailError);
-    hideError(messageError);
-  }
-  
-  function showSuccessMessage() {
-    if (!successMessage) return;
-    
-    successMessage.classList.remove('hidden');
-    
-    // Add animation class
-    successMessage.style.opacity = '0';
-    successMessage.style.transform = 'translateY(20px)';
-    
-    // Animate in
-    setTimeout(() => {
-      successMessage.style.transition = 'all 0.5s ease';
-      successMessage.style.opacity = '1';
-      successMessage.style.transform = 'translateY(0)';
-    }, 100);
-    
-    // Hide after 5 seconds
-    setTimeout(() => {
-      successMessage.style.opacity = '0';
-      successMessage.style.transform = 'translateY(-20px)';
-      setTimeout(() => {
-        successMessage.classList.add('hidden');
-        successMessage.style.transition = '';
-      }, 500);
-    }, 5000);
-  }
-}
-
-// Switch between projects
-function switchProject(projectId, buttonElement) {
-  if (!chart || !projectsData[projectId]) return;
-  
-  currentProject = projectId;
-  const data = projectsData[projectId];
-  
-  // Update active project button
-  document.querySelectorAll('.project-btn').forEach(btn => {
-    btn.classList.remove('active');
-  });
-  buttonElement.classList.add('active');
-  
-  // Update chart title - this was the bug!
-  const chartTitleElement = document.getElementById('chart-title');
-  if (chartTitleElement) {
-    chartTitleElement.textContent = data.title;
-  }
-  
-  // Update chart data
-  chart.data.labels = data.labels;
-  chart.data.datasets[0].data = data.predicted;
-  chart.data.datasets[1].data = data.actual;
-  
-  // Apply current visibility settings
-  chart.data.datasets[0].hidden = !lineVisibility.predicted;
-  chart.data.datasets[1].hidden = !lineVisibility.actual;
-  
-  // Animate chart update
-  chart.update('active');
-}
-
-// Toggle predicted/actual lines
-function toggleLine(lineType, buttonElement) {
-  if (!chart) return;
-  
-  // Toggle visibility state
-  lineVisibility[lineType] = !lineVisibility[lineType];
-  
-  // Update button visual state
-  if (lineVisibility[lineType]) {
-    buttonElement.classList.add('active');
+  /* ---------------- Reveal on scroll ---------------- */
+  const revealEls = Array.from(document.querySelectorAll(".reveal"));
+  if (prefersReduced || !("IntersectionObserver" in window)) {
+    revealEls.forEach((el) => el.classList.add("is-visible"));
   } else {
-    buttonElement.classList.remove('active');
+    const revObserver = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("is-visible");
+            obs.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+    );
+    revealEls.forEach((el) => revObserver.observe(el));
   }
-  
-  // Update chart dataset visibility
-  const datasetIndex = lineType === 'predicted' ? 0 : 1;
-  chart.data.datasets[datasetIndex].hidden = !lineVisibility[lineType];
-  
-  // Animate chart update
-  chart.update('active');
-}
 
-// Scroll-triggered animations for better performance
-const observerOptions = {
-  threshold: 0.1,
-  rootMargin: '0px 0px -50px 0px'
-};
-
-const sectionObserver = new IntersectionObserver(function(entries) {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.style.opacity = '1';
-      entry.target.style.transform = 'translateY(0)';
+  /* ---------------- Animated counters ---------------- */
+  function formatNum(value, decimals) {
+    return decimals > 0 ? value.toFixed(decimals) : Math.round(value).toLocaleString("en-IN");
+  }
+  function animateCount(el) {
+    const target = parseFloat(el.dataset.count || "0");
+    const decimals = parseInt(el.dataset.decimals || "0", 10);
+    const prefix = el.dataset.prefix || "";
+    const suffix = el.dataset.suffix || "";
+    if (prefersReduced) {
+      el.textContent = prefix + formatNum(target, decimals) + suffix;
+      return;
     }
-  });
-}, observerOptions);
-
-// Observe sections for scroll animations (after main content is shown)
-setTimeout(() => {
-  const sections = document.querySelectorAll('.section');
-  sections.forEach(section => {
-    sectionObserver.observe(section);
-  });
-}, 5500);
-
-// Keyboard navigation improvements
-document.addEventListener('keydown', function(e) {
-  // Allow escape key to skip loading screen (for development/accessibility)
-  if (e.key === 'Escape' && document.getElementById('loader') && !document.getElementById('loader').classList.contains('fade-out')) {
-    const loader = document.getElementById('loader');
-    const main = document.getElementById('main');
-    loader.classList.add('fade-out');
-    setTimeout(() => {
-      loader.style.display = 'none';
-      main.classList.remove('hidden');
-      initializeChart();
-      setupInteractions();
-      setupContactForm();
-    }, 800);
+    const duration = 1200;
+    const start = performance.now();
+    const tick = (now) => {
+      const p = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = prefix + formatNum(target * eased, decimals) + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
   }
-});
+  const counters = Array.from(document.querySelectorAll("[data-count]"));
+  if ("IntersectionObserver" in window) {
+    const countObserver = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            animateCount(e.target);
+            obs.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+    counters.forEach((c) => countObserver.observe(c));
+  } else {
+    counters.forEach(animateCount);
+  }
 
-// Add ripple animation keyframe
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes ripple {
-    0% {
-      transform: scale(0);
-      opacity: 1;
+  /* =========================================================
+     DASHBOARD DEMO  (representative sample data)
+     Swap these arrays with a real CSV export anytime.
+     heat = avg PnL points, rows = Mon..Fri, cols = DTE 0..4
+     equity = cumulative PnL (₹ lakhs) for years below
+     ========================================================= */
+  const YEARS = ["2019", "2020", "2021", "2022", "2023", "2024"];
+  const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+  const DTE_COLS = ["0 DTE", "1", "2", "3", "4"];
+
+  const DASH = {
+    NIFTY: {
+      heat: [
+        [30, 16, 10, 5, -3],
+        [44, 26, 14, 8, 1],
+        [61, 37, 20, 9, 2],
+        [78, 41, 18, -9, -16],
+        [14, 7, 4, -2, -8],
+      ],
+      equity: [8, 19, 33, 30, 52, 74],
+    },
+    BANKNIFTY: {
+      heat: [
+        [52, 28, 12, -6, -14],
+        [70, 39, 19, 4, -5],
+        [96, 55, 26, 8, -2],
+        [120, 62, 21, -18, -33],
+        [22, 11, -4, -12, -20],
+      ],
+      equity: [11, 26, 47, 41, 73, 102],
+    },
+    FINNIFTY: {
+      heat: [
+        [18, 10, 6, 2, -2],
+        [27, 15, 8, 3, 0],
+        [-9, 4, 9, 5, 1],
+        [44, 25, 11, -5, -10],
+        [9, 5, 2, -3, -7],
+      ],
+      equity: [null, null, 9, 21, 38, 61],
+    },
+  };
+
+  let currentIndex = "NIFTY";
+  let equityChart = null;
+
+  function cellStyle(v, maxAbs) {
+    const t = Math.min(Math.abs(v) / maxAbs, 1);
+    const hue = v >= 0 ? 152 : 2;
+    const sat = 20 + t * 58;
+    const light = 30 + t * 30;
+    return {
+      bg: "hsl(" + hue + " " + sat.toFixed(0) + "% " + light.toFixed(0) + "%)",
+      fg: light > 46 ? "#06120d" : "rgba(255,255,255,0.92)",
+    };
+  }
+
+  function renderHeatmap(indexKey) {
+    const host = document.getElementById("heatmap");
+    if (!host) return;
+    const grid = DASH[indexKey].heat;
+    const maxAbs = Math.max(...grid.flat().map((v) => Math.abs(v)), 1);
+    host.innerHTML = "";
+
+    // Header row
+    const header = document.createElement("div");
+    header.className = "hm-row";
+    header.innerHTML =
+      '<span class="hm-corner">Day \\ DTE</span>' +
+      DTE_COLS.map((d) => '<span class="hm-head">' + d + "</span>").join("");
+    host.appendChild(header);
+
+    // Data rows
+    grid.forEach((row, r) => {
+      const rowEl = document.createElement("div");
+      rowEl.className = "hm-row";
+      rowEl.innerHTML = '<span class="hm-rowlabel">' + WEEKDAYS[r] + "</span>";
+      row.forEach((v, c) => {
+        const { bg, fg } = cellStyle(v, maxAbs);
+        const cell = document.createElement("span");
+        cell.className = "hm-cell";
+        cell.style.background = bg;
+        cell.style.color = fg;
+        cell.textContent = v > 0 ? "+" + v : String(v);
+        cell.title = WEEKDAYS[r] + " · " + DTE_COLS[c] + " → " + (v > 0 ? "+" : "") + v + " pts (avg)";
+        rowEl.appendChild(cell);
+      });
+      host.appendChild(rowEl);
+    });
+  }
+
+  function renderEquity(indexKey) {
+    const canvas = document.getElementById("equityChart");
+    if (!canvas || typeof Chart === "undefined") return;
+    const data = DASH[indexKey].equity;
+    const ctx = canvas.getContext("2d");
+    const grad = ctx.createLinearGradient(0, 0, 0, 280);
+    grad.addColorStop(0, "rgba(45, 212, 191, 0.35)");
+    grad.addColorStop(1, "rgba(45, 212, 191, 0)");
+
+    if (equityChart) {
+      equityChart.data.datasets[0].data = data;
+      equityChart.data.datasets[0].label = indexKey + " cumulative PnL";
+      equityChart.update();
+      return;
     }
-    100% {
-      transform: scale(40);
-      opacity: 0;
-    }
-  }
-  
-  /* Additional smooth transitions */
-  .project-card,
-  .contact-link svg,
-  .project-btn,
-  .toggle-btn {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  
-  /* Enhanced focus states */
-  .project-card:focus-within {
-    outline: 2px solid #00f7ff;
-    outline-offset: 4px;
-  }
-`;
 
-document.head.appendChild(style);
+    equityChart = new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: YEARS,
+        datasets: [
+          {
+            label: indexKey + " cumulative PnL",
+            data: data,
+            borderColor: "#2dd4bf",
+            backgroundColor: grad,
+            borderWidth: 2.5,
+            fill: true,
+            tension: 0.35,
+            pointRadius: 3,
+            pointHoverRadius: 6,
+            pointBackgroundColor: "#2dd4bf",
+            spanGaps: true,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: "#0a0e14",
+            borderColor: "#2dd4bf",
+            borderWidth: 1,
+            padding: 10,
+            callbacks: { label: (c) => " ₹" + c.parsed.y + " lakhs" },
+          },
+        },
+        scales: {
+          x: { grid: { color: "rgba(255,255,255,0.05)" }, ticks: { color: "#6b7686" } },
+          y: {
+            grid: { color: "rgba(255,255,255,0.05)" },
+            ticks: { color: "#6b7686", callback: (v) => "₹" + v + "L" },
+          },
+        },
+        animation: prefersReduced ? false : { duration: 900, easing: "easeInOutQuart" },
+      },
+    });
+  }
 
-// Performance monitoring (optional - can be removed in production)
-if ('performance' in window) {
-  window.addEventListener('load', () => {
-    setTimeout(() => {
-      const perfData = performance.getEntriesByType('navigation')[0];
-      if (perfData) {
-        console.log(`Page loaded in ${Math.round(perfData.loadEventEnd - perfData.fetchStart)}ms`);
+  function setIndex(indexKey) {
+    if (!DASH[indexKey]) return;
+    currentIndex = indexKey;
+    document.querySelectorAll(".seg__btn").forEach((b) =>
+      b.classList.toggle("is-active", b.dataset.index === indexKey)
+    );
+    renderHeatmap(indexKey);
+    renderEquity(indexKey);
+  }
+
+  document.querySelectorAll(".seg__btn").forEach((btn) =>
+    btn.addEventListener("click", () => setIndex(btn.dataset.index))
+  );
+
+  function initDashboard() {
+    renderHeatmap(currentIndex);
+    renderEquity(currentIndex);
+  }
+  if (typeof Chart !== "undefined") {
+    initDashboard();
+  } else {
+    window.addEventListener("load", initDashboard);
+  }
+
+  /* ---------------- Contact form ---------------- */
+  const form = document.getElementById("contactForm");
+  if (form) {
+    const emailInput = document.getElementById("userEmail");
+    const msgInput = document.getElementById("userMessage");
+    const emailErr = document.getElementById("emailError");
+    const msgErr = document.getElementById("messageError");
+    const success = document.getElementById("formSuccess");
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const showErr = (el, m) => { if (el) { el.textContent = m; el.classList.add("show"); } };
+    const hideErr = (el) => { if (el) { el.textContent = ""; el.classList.remove("show"); } };
+
+    const validEmail = () => {
+      const v = (emailInput.value || "").trim();
+      if (!v) return showErr(emailErr, "Email is required"), false;
+      if (!emailRe.test(v)) return showErr(emailErr, "Enter a valid email address"), false;
+      return hideErr(emailErr), true;
+    };
+    const validMsg = () => {
+      const v = (msgInput.value || "").trim();
+      if (!v) return showErr(msgErr, "Message is required"), false;
+      if (v.length < 10) return showErr(msgErr, "Please write at least 10 characters"), false;
+      return hideErr(msgErr), true;
+    };
+
+    emailInput.addEventListener("input", () => hideErr(emailErr));
+    msgInput.addEventListener("input", () => hideErr(msgErr));
+
+    const showSuccess = () => {
+      if (!success) return;
+      success.classList.remove("hidden");
+      form.reset();
+      setTimeout(() => success.classList.add("hidden"), 6000);
+    };
+
+    const mailtoFallback = () => {
+      const subject = encodeURIComponent("Portfolio contact from " + emailInput.value.trim());
+      const body = encodeURIComponent("From: " + emailInput.value.trim() + "\n\n" + msgInput.value.trim());
+      window.open("mailto:aridham1102@gmail.com?subject=" + subject + "&body=" + body, "_blank");
+    };
+
+    // Netlify hosts the form backend; anywhere else (e.g. GitHub Pages) we open email
+    // so a message is never silently dropped.
+    const isNetlify = /netlify\.app$/.test(location.hostname) || form.dataset.handler === "netlify";
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const okEmail = validEmail();
+      const okMsg = validMsg();
+      if (!okEmail || !okMsg) return;
+
+      if (!isNetlify) {
+        mailtoFallback();
+        showSuccess();
+        return;
       }
-    }, 0);
-  });
-}
 
-// Accessibility enhancements
-document.addEventListener('DOMContentLoaded', function() {
-  // Respect user's motion preferences
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  
-  if (prefersReducedMotion) {
-    // Reduce animation durations
-    const animations = document.querySelectorAll('*');
-    animations.forEach(el => {
-      el.style.animationDuration = '0.01s';
-      el.style.transitionDuration = '0.01s';
+      const payload = new URLSearchParams(new FormData(form)).toString();
+      fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: payload,
+      })
+        .then((r) => (r.ok ? showSuccess() : mailtoFallback()))
+        .catch(() => mailtoFallback());
     });
   }
-  
-  // Announce loading completion to screen readers
-  setTimeout(() => {
-    const announcement = document.createElement('div');
-    announcement.setAttribute('aria-live', 'polite');
-    announcement.setAttribute('aria-atomic', 'true');
-    announcement.className = 'sr-only';
-    announcement.textContent = 'Interactive portfolio loaded successfully. Navigate through projects using the selector buttons and fill out the contact form to get in touch.';
-    document.body.appendChild(announcement);
-    
-    // Remove announcement after screen readers have processed it
-    setTimeout(() => {
-      announcement.remove();
-    }, 3000);
-  }, 6000);
-});
-
-// Enhanced form interactions
-document.addEventListener('DOMContentLoaded', function() {
-  setTimeout(() => {
-    const contactInputs = document.querySelectorAll('.contact-input, .contact-textarea');
-    
-    contactInputs.forEach(input => {
-      // Add focus and blur effects
-      input.addEventListener('focus', function() {
-        if (this.parentElement) {
-          this.parentElement.style.transform = 'scale(1.02)';
-        }
-      });
-      
-      input.addEventListener('blur', function() {
-        if (this.parentElement) {
-          this.parentElement.style.transform = 'scale(1)';
-        }
-      });
-      
-      // Add typing effect
-      input.addEventListener('input', function() {
-        if (this.value) {
-          this.style.textShadow = '0 0 5px rgba(0, 247, 255, 0.3)';
-        } else {
-          this.style.textShadow = 'none';
-        }
-      });
-    });
-  }, 6000);
-});
+})();
