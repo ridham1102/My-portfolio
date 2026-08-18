@@ -358,9 +358,78 @@
         <div class="container">
           <p class="section__kicker reveal">04 — Projects</p>
           <h2 class="section__title reveal">Selected projects</h2>
-          <p class="section__lead reveal">From forests to finance — end-to-end work with real datasets.</p>
+          <p class="section__lead reveal">
+            Quant research first — a live index-reconstruction system, deep-learning replications and
+            honest negative results — with earlier ML and analytics work below.
+          </p>
 
           <div class="proj-grid">
+            <article class="proj reveal">
+              <header class="proj__head">
+                <span class="proj__badge">REAL-TIME</span>
+                <span class="proj__metric">0.04% MAE</span>
+              </header>
+              <h3 class="proj__title">CAS Live Index</h3>
+              <p class="proj__desc">
+                Rebuilds <strong>NIFTY 50 and SENSEX live</strong> during the 15-minute closing-auction
+                blackout, from public NSE/BSE endpoints (free-float weights, SENSEX divisor recovery).
+                Tracked NSE's indicative close within <strong>~10 points across 10 live sessions</strong>,
+                with per-stock attribution the exchange doesn't publish.
+              </p>
+              <div class="proj__tags"><span>Live data</span><span>NSE/BSE</span><span>Index math</span></div>
+              <svg class="proj__spark" viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,22 25,20 50,23 75,19 100,21 125,18 150,20 175,17 200,18" /></svg>
+              <a class="proj__link" href="https://github.com/ridham1102/cas-live-index" target="_blank" rel="noopener noreferrer">View code →</a>
+            </article>
+
+            <article class="proj reveal">
+              <header class="proj__head">
+                <span class="proj__badge">DEEP LEARNING</span>
+                <span class="proj__metric">arXiv replication</span>
+              </header>
+              <h3 class="proj__title">Deep Learning for Options Trading</h3>
+              <p class="proj__desc">
+                Replication of Tan, Roberts &amp; Zohren (2024): <strong>Sharpe-loss Linear/MLP/LSTM</strong>
+                models on NIFTY/BANKNIFTY straddles — walk-forward backtests against 8 classical baselines,
+                transaction-cost sensitivity to 50&nbsp;bps, and a documented audit of why the headline
+                Sharpe&nbsp;3.37 should be discounted.
+              </p>
+              <div class="proj__tags"><span>LSTM</span><span>Walk-forward</span><span>Sharpe loss</span></div>
+              <svg class="proj__spark" viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,32 25,26 50,29 75,20 100,23 125,13 150,16 175,8 200,10" /></svg>
+              <a class="proj__link" href="https://github.com/ridham1102/dl-options-trading" target="_blank" rel="noopener noreferrer">View code →</a>
+            </article>
+
+            <article class="proj reveal">
+              <header class="proj__head">
+                <span class="proj__badge">NLP · ML</span>
+                <span class="proj__metric">64% vs ~57% base</span>
+              </header>
+              <h3 class="proj__title">NLP Sentiment Risk Filter</h3>
+              <p class="proj__desc">
+                <strong>GDELT macro-news sentiment + FinBERT + walk-forward XGBoost</strong> flagging
+                dangerous high-volatility days for NIFTY/BANKNIFTY straddle selling — flagged skip-days
+                showed larger next-day moves than average.
+              </p>
+              <div class="proj__tags"><span>FinBERT</span><span>XGBoost</span><span>GDELT</span></div>
+              <svg class="proj__spark" viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,28 25,24 50,27 75,18 100,22 125,14 150,18 175,10 200,13" /></svg>
+              <a class="proj__link" href="https://github.com/ridham1102/nlp-sentiment-risk-filter" target="_blank" rel="noopener noreferrer">View code →</a>
+            </article>
+
+            <article class="proj reveal">
+              <header class="proj__head">
+                <span class="proj__badge">REINFORCEMENT L.</span>
+                <span class="proj__metric">Negative result</span>
+              </header>
+              <h3 class="proj__title">Transformer-DDQN Straddle</h3>
+              <p class="proj__desc">
+                An honest "what failed" study: <strong>Transformer-DDQN</strong> (arXiv:2509.07987) applied
+                to Indian index straddle trading, with a full diagnosis of why the agent collapsed —
+                documenting negative results the way real research should.
+              </p>
+              <div class="proj__tags"><span>RL</span><span>DDQN</span><span>Transformers</span></div>
+              <svg class="proj__spark" viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,10 25,14 50,12 75,18 100,16 125,24 150,22 175,30 200,32" /></svg>
+              <a class="proj__link" href="https://github.com/ridham1102/transformer-ddqn-straddle" target="_blank" rel="noopener noreferrer">View code →</a>
+            </article>
+
             <article class="proj reveal">
               <header class="proj__head">
                 <span class="proj__badge">REGRESSION</span>

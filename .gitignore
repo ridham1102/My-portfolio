@@ -14,3 +14,4 @@ __pycache__/
 # Source résumé / docs (the published copy lives in assets/)
 /Ridham Arora.pdf
 *.docx
+resume-src.html
