@@ -205,28 +205,37 @@
             </div>
             <ul class="exp__points">
               <li>
-                Develop and implement <strong>data-driven options trading strategies</strong>
-                for Indian financial markets (NSE / BSE / MCX) and US markets.
+                Identified the firm's top-performing options setups — measured by backtested PnL across
+                <strong>days-to-expiry, weekday and strike</strong> — by designing and testing
+                <strong>quantitative trading strategies</strong> for NSE, BSE, MCX and US
+                <strong>derivatives</strong> markets.
               </li>
               <li>
-                Built a <strong>memory-optimized backtesting data pipeline</strong> in
-                <strong>Python + Polars</strong> that processes <strong>years of options data</strong>
-                (RAR → Parquet), aggregating PnL across strategy parameters, days-to-expiry and weekdays.
+                Cut strategy research turnaround <strong>from hours to seconds</strong> on
+                <strong>100M–1B+ row</strong> options datasets by replacing full Excel reloads with an
+                <strong>incremental Python + Polars pipeline</strong> that re-processes only new market data.
               </li>
               <li>
-                Designed <strong>incremental processing</strong> (only re-reads changed dates) that
-                cut dashboard build/load time from minutes to near real-time, handling millions of rows
-                with chunked aggregation and tight memory control.
+                Enabled <strong>near real-time strategy analysis</strong> for the trading team — dashboards
+                refresh in seconds instead of hours — by building a <strong>DuckDB-over-Parquet</strong>
+                query layer and a <strong>Streamlit</strong> app with an Excel-style drag-and-drop pivot
+                builder and <strong>automated</strong> Excel heatmap generation (xlwings).
               </li>
               <li>
-                Created modular Python frameworks to test multiple strategy ideas against real market
-                datasets, and built <strong>interactive PnL heatmaps and dashboards</strong>
-                (Python &amp; Excel) for strategy research.
+                <strong>Optimized</strong> strategy selection across <strong>thousands of parameter
+                combinations</strong> per backtest — evaluating <strong>profit potential and risk
+                exposure</strong> of each variant under diverse market conditions — via a systematic PnL
+                aggregation framework that separates robust setups from noise.
+              </li>
+              <li>
+                <strong>Automated daily data updates</strong>, eliminating manual reloads entirely, by
+                engineering memory-optimized ingestion (RAR → Parquet, chunked aggregation) that processes
+                millions of rows per run within tight memory limits.
               </li>
             </ul>
             <div class="exp__tags">
-              <span>Python</span><span>Polars</span><span>Pandas</span><span>NumPy</span>
-              <span>Parquet</span><span>Backtesting</span><span>Options</span><span>Excel</span>
+              <span>Python</span><span>Polars</span><span>DuckDB</span><span>Streamlit</span>
+              <span>Parquet</span><span>Backtesting</span><span>Options</span><span>xlwings</span>
             </div>
           </div>
         </div>
